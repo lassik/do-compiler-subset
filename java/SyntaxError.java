@@ -1,2 +1,6 @@
 class SyntaxError extends Exception {
-    public SyntaxError() { super("Syntax error"); } }
+
+    public SyntaxError() {
+        super("Syntax error");
+    }
+}

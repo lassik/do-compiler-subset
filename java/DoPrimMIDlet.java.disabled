@@ -4,65 +4,90 @@ import javax.microedition.midlet.*;
 
 public class DoPrimMIDlet extends MIDlet implements CommandListener {
 
-    private Object pop() { return(DoPrim.pop()); }
-    
-    private Object push(Object x) { return(DoPrim.push(x)); }
-    
-    private Object peek(int i) { return (DoPrim.peek(i)); }
-    
+    private Object pop() {
+        return(DoPrim.pop());
+    }
+
+    private Object push(Object x) {
+        return(DoPrim.push(x));
+    }
+
+    private Object peek(int i) {
+        return (DoPrim.peek(i));
+    }
+
     private Random random = new Random();
-    
+
     public void startApp() {
-        DoProgram._main0(); }
-    
-    public void pauseApp() { }
-    
-    public void destroyApp(boolean ignore) { }
-    
+        DoProgram._main0();
+    }
+
+    public void pauseApp() {
+    }
+
+    public void destroyApp(boolean ignore) {
+    }
+
     public void commandAction(Command c, Displayable d) {
-        DoProgram._command0(); }
-    
+        DoProgram._command0();
+    }
+
     public void p_newform() {
-        Form f = new Form((String)pop()); f.setCommandListener(this); push(f); }
+        Form f = new Form((String)pop()); f.setCommandListener(this); push(f);
+    }
 
     public void p_newintfield() {
-        push(new TextField((String)pop(), "", 9, TextField.NUMERIC)); }
+        push(new TextField((String)pop(), "", 9, TextField.NUMERIC));
+    }
 
     public void p_newokcmd() {
-        push(new Command((String)pop(), Command.OK, 0)); }
+        push(new Command((String)pop(), Command.OK, 0));
+    }
 
     public void p_newbackcmd() {
-        push(new Command((String)pop(), Command.BACK, 0)); }
+        push(new Command((String)pop(), Command.BACK, 0));
+    }
 
     public void p_addcmd() {
-        ((Form)pop()).addCommand((Command)peek(0)); }
+        ((Form)pop()).addCommand((Command)peek(0));
+    }
 
     public void p_addctl() {
-        ((Form)pop()).append(peek(0)); }
+        ((Form)pop()).append(peek(0));
+    }
 
     public void p_curform() {
-        push(Display.getDisplay(this).getCurrent()); }
+        push(Display.getDisplay(this).getCurrent());
+    }
 
     public void p_s_curformstore() {
-        Display.getDisplay(this).setCurrent((Displayable)pop()); }
+        Display.getDisplay(this).setCurrent((Displayable)pop());
+    }
 
     public void p_fieldint() {
-        push(Integer.parseInt(((TextField)pop()).getString())); }
+        push(Integer.parseInt(((TextField)pop()).getString()));
+    }
 
     public void p_clearform() {
-        ((Form)pop()).deleteAll(); }
+        ((Form)pop()).deleteAll();
+    }
 
     public void p_exit() {
-        notifyDestroyed(); }
+        notifyDestroyed();
+    }
 
     // The following primitives don't really have anything
     // specifically to do with mobile devices.
-    
+
     public void p_s_randintlt() {
-        push(new Integer(random.nextInt((Integer)pop()))); }
+        push(new Integer(random.nextInt((Integer)pop())));
+    }
 
     public void p_intstr() {
-        push(((Integer)pop()).toString()); }
+        push(((Integer)pop()).toString());
+    }
 
     public void p_is() {
-        DoPrim.flag = (pop() == peek(0)); } }
+        DoPrim.flag = (pop() == peek(0));
+    }
+}

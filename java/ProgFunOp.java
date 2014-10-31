@@ -1,2 +1,3 @@
 public abstract class ProgFunOp {
-    public int arg; }
+    public int arg;
+}

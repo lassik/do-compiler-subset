@@ -12,7 +12,7 @@ public class ClassWriter {
     /*
      * Parameters from the user of the class
      */
-    
+
     private OutputStream os;
     private Prog prog;
 
@@ -32,89 +32,103 @@ public class ClassWriter {
      * be more complicated to code.  Buffering uses up memory but
      * that's not an issue since Do source files are tiny.
      */
-    
+
     private ByteArrayOutputStream pool = new ByteArrayOutputStream();
     private ByteArrayOutputStream main = new ByteArrayOutputStream();
     private ByteArrayOutputStream file = new ByteArrayOutputStream();
 
     private void checkRange(int x, int min, int max) throws Exception {
-        if((x < min) || (x > max)) throw new Exception(String.format("Value %d outside valid range %d..%d", x, min, max)); }
+        if((x < min) || (x > max)) throw new Exception(String.format("Value %d outside valid range %d..%d", x, min, max));
+    }
 
     /*
      * Append unsigned (uN) and signed (sN) integers into the given
      * byte buffer.  The integer will take up N bytes.  It will be in
      * big endian byte order as specified for the class file format.
      */
-    
+
     private void u1(ByteArrayOutputStream baos, int x) throws Exception {
         checkRange(x, 0, 255);
-        baos.write(x); }
+        baos.write(x);
+    }
 
     private void u2(ByteArrayOutputStream baos, int x) throws Exception {
         checkRange(x, 0, 65535);
         u1(baos, 255 & (x >> 8));
-        u1(baos, 255 & (x >> 0)); }
+        u1(baos, 255 & (x >> 0));
+    }
 
     private void u4(ByteArrayOutputStream baos, int x) throws Exception {
         checkRange(x, 0, 2147483647);  // u4 max value doesn't fit in a java int, so this is java int's max value
         u1(baos, 255 & (x >> 24));
         u1(baos, 255 & (x >> 16));
         u1(baos, 255 & (x >> 8));
-        u1(baos, 255 & (x >> 0)); }
+        u1(baos, 255 & (x >> 0));
+    }
 
     private void s2(ByteArrayOutputStream baos, int x) throws Exception {
         checkRange(x, -32768, 32767);
         u1(baos, 255 & (x >> 8));
-        u1(baos, 255 & (x >> 0)); }
+        u1(baos, 255 & (x >> 0));
+    }
 
     /*
      * Populate the constant pool.  Each routine adds an item to the
      * pool and returns its index.
      */
-    
+
     private int poolCount;
-    
+
     private int constUTF8(String s) throws Exception {
         u1(pool, 1); byte[] b = s.getBytes("utf8");
         u2(pool, b.length); pool.write(b, 0, b.length);
-        return(++poolCount); }
+        return(++poolCount);
+    }
 
     private int constLiteralInt(int x) throws Exception {
-        u1(pool, 3); u4(pool, x); return(++poolCount); }
-        
+        u1(pool, 3); u4(pool, x); return(++poolCount);
+    }
+
     private int constClass(String className) throws Exception {
         int i = constUTF8(className);
-        u1(pool, 7); u2(pool, i); return(++poolCount); }
+        u1(pool, 7); u2(pool, i); return(++poolCount);
+    }
 
     private int constLiteralString(String s) throws Exception {
         int i = constUTF8(s);
-        u1(pool, 8); u2(pool, i); return(++poolCount); }
+        u1(pool, 8); u2(pool, i); return(++poolCount);
+    }
 
     private int constField(String className, String fieldName, String fieldType) throws Exception {
         int i = constClass(className); int j = constNameAndType(fieldName, fieldType);
-        u1(pool, 9); u2(pool, i); u2(pool, j); return(++poolCount); }
+        u1(pool, 9); u2(pool, i); u2(pool, j); return(++poolCount);
+    }
 
     private int constMethod(String className, String fieldName, String fieldType) throws Exception {
         int i = constClass(className); int j = constNameAndType(fieldName, fieldType);
-        u1(pool, 10); u2(pool, i); u2(pool, j); return(++poolCount); }
+        u1(pool, 10); u2(pool, i); u2(pool, j); return(++poolCount);
+    }
 
     private int constNameAndType(String fieldName, String fieldType) throws Exception {
         int i = constUTF8(fieldName); int j = constUTF8(fieldType);
-        u1(pool, 12); u2(pool, i); u2(pool, j); return(++poolCount); }
+        u1(pool, 12); u2(pool, i); u2(pool, j); return(++poolCount);
+    }
 
     /*
      * Populate the main area of the class file: fields and methods
      * for the class.  Each field is declared public static and has
      * the type Object.
      */
-    
+
     private void mainFields() throws Exception {
         u2(main, prog.vars.length);
         for(ProgVar var: prog.vars) {
             u2(main, 1 | 8);  // public static
             u2(main, constUTF8(var.id));
             u2(main, constUTF8("Ljava/lang/Object;"));
-            u2(main, 0); } }  // attribute count
+            u2(main, 0);  // attribute count
+        }
+    }
 
     /*
      * This turns the code in the body of a Do function into JVM
@@ -128,7 +142,7 @@ public class ClassWriter {
      * number specifying which instruction to execute.  The count,
      * size and meaning of the operands depends on the instruction.
      */
-    
+
     private byte[] methodCode(ProgFun fun) throws Exception {
         ByteArrayOutputStream code = new ByteArrayOutputStream();
         for(ProgFunOp op: fun.ops) {
@@ -180,9 +194,11 @@ public class ClassWriter {
                 u1(code, 184); u2(code, constMethod("DoPrim", "pop", "()Ljava/lang/Object;"));
                 // putstatic index:uint16 -- const pool symbolic ref to field
                 u1(code, 179); u2(code, constField("DoProgram", prog.vars[op.arg].id, "Ljava/lang/Object;"));
-            } }
+            }
+        }
         u1(code, 177); // return
-        return(code.toByteArray()); }
+        return(code.toByteArray());
+    }
 
     /*
      * Writes out the declaration and code for a single Java method,
@@ -191,7 +207,7 @@ public class ClassWriter {
      * emitted methods will have the signature: public static void myMethod() throws Exception
      * except that main() will have its usual String[] arg
      */
-    
+
     private void mainMethods() throws Exception {
         u2(main, prog.funs.length);
         for(ProgFun fun: prog.funs) {
@@ -214,13 +230,15 @@ public class ClassWriter {
             u4(main, code.length);
             main.write(code, 0, code.length);
             u2(main, 0);  // catch block count
-            u2(main, 0); } }  // attribute count
+            u2(main, 0);  // attribute count
+        }
+    }
 
     /*
      * Calls other methods to generate all the difficult bits of the
      * class file into byte buffers, then writes out the class file.
      */
-    
+
     public void write(Prog prog) throws Exception {
         int thisClass  = constClass("DoProgram");
         int superClass = constClass("java/lang/Object");
@@ -239,7 +257,10 @@ public class ClassWriter {
         u2(file, 0); // interface count
         main.writeTo(file); // fields and methods
         u2(file, 0); // attribute count
-        file.writeTo(os); }
+        file.writeTo(os);
+    }
 
     public ClassWriter(OutputStream os) {
-        this.os = os; } }
+        this.os = os;
+    }
+}

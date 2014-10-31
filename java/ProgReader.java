@@ -19,22 +19,27 @@ public class ProgReader {
     private String nameIDBase(String name) {
         StringBuilder sb = new StringBuilder(); sb.append('_');
         for(char c: name.toCharArray()) sb.append(Character.isLetterOrDigit(c) ? c : '_');
-        return(sb.toString()); }
+        return(sb.toString());
+    }
 
     private String nameNewID(String name) {
         String base = nameIDBase(name); Integer obj = nameid.get(base);
         int i = (obj == null) ? 0 : (obj.intValue() + 1); nameid.put(base, i);
-        return(base + String.format("%d", i)); }
+        return(base + String.format("%d", i));
+    }
 
     private ProgFunOp compileFunOp(ConsFunOpPushStr cfo) {
-        return(new ProgFunOpPushStr(strs.indexOfOldOrNew(cfo.value))); }
+        return(new ProgFunOpPushStr(strs.indexOfOldOrNew(cfo.value)));
+    }
 
     private ProgFunOp compileFunOp(ConsFunOpPushInt cfo) {
-        return(new ProgFunOpPushInt(cfo.value)); }
+        return(new ProgFunOpPushInt(cfo.value));
+    }
 
     private ProgFunOp compileFunOp(ConsFunOpRef cfo) {
         ProgFunOp pfo = dict.get(cfo.name); if(pfo != null) return(pfo);
-        return(new ProgFunOpPrim(prims.indexOfOldOrNew(cfo.name))); }
+        return(new ProgFunOpPrim(prims.indexOfOldOrNew(cfo.name)));
+    }
 
     private ProgFunOp compileFunOp(ConsFunOp cfo) {
         if(cfo instanceof ConsFunOpPushStr)
@@ -43,20 +48,24 @@ public class ProgReader {
             return(compileFunOp((ConsFunOpPushInt)cfo));
         if(cfo instanceof ConsFunOpRef)
             return(compileFunOp((ConsFunOpRef)cfo));
-        return(null); }
+        return(null);
+    }
 
     private void compile(ConsFun cf) {
         int idx = funs.size(); List<ProgFunOp> ops = new ArrayList<ProgFunOp>();
         for(ConsFunOp cfo: cf.ops) ops.add(compileFunOp(cfo));
         funs.add(new ProgFun(cf.name, nameNewID(cf.name), ops));
-        dict.put(cf.name, new ProgFunOpCall(idx)); }
+        dict.put(cf.name, new ProgFunOpCall(idx));
+    }
 
     private void compile(ConsLet let) {
         for(String varname: let.varnames) {
             int idx = vars.size();
             vars.add(new ProgVar(varname, nameNewID(varname)));
             dict.put(varname, new ProgFunOpVarGet(idx));
-            dict.put(varname + "!", new ProgFunOpVarSet(idx)); } }
+            dict.put(varname + "!", new ProgFunOpVarSet(idx));
+        }
+    }
 
     private void compile(Cons c) throws Exception {
         if(c instanceof ConsFun)
@@ -64,11 +73,15 @@ public class ProgReader {
         else if(c instanceof ConsLet)
             compile((ConsLet)c);
         else
-            throw new SyntaxError(); }
+            throw new SyntaxError();
+    }
 
     public Prog read() throws Exception {
         Cons c; while((c = cr.read()) != null) compile(c);
-        return(new Prog(prims, strs, vars, funs)); }
+        return(new Prog(prims, strs, vars, funs));
+    }
 
     public ProgReader(ConsReader cr) {
-        this.cr = cr; } }
+        this.cr = cr;
+    }
+}
