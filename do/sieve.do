@@ -1,4 +1,5 @@
-# Write out the first n prime numbers using the Sieve of Eratosthenes
+# Write out all prime numbers among the first n natural numbers
+# using the Sieve of Eratosthenes
 
 let x; show x! x write " " write x;
 
