@@ -13,7 +13,8 @@ public class ConsReader {
     }
 
     private Cons readOneOf(R... rs) throws Exception {
-        Cons c; for(R r: rs) if((c = r.read()) != null) return(c);
+        Cons c;
+        for(R r: rs) if((c = r.read()) != null) return(c);
         throw new SyntaxError();
     }
 
@@ -52,7 +53,8 @@ public class ConsReader {
 
     class FunR implements R {
         public Cons read() throws Exception {
-            TokSym sym = ((TokSym)tr.read(TokSym.class)); if(sym == null) return(null);
+            TokSym sym = ((TokSym)tr.read(TokSym.class));
+            if(sym == null) return(null);
             String name = sym.name;
             List<ConsFunOp> ops = new ArrayList<ConsFunOp>();
             while(!tr.skip(new TokSemi())) ops.add((ConsFunOp)(new ObjR().read()));
@@ -62,7 +64,8 @@ public class ConsReader {
 
     class TopR implements R {
         public Cons read() throws Exception {
-            if(tr.atEOF()) return(null); return(readOneOf(new LetR(), new FunR()));
+            if(tr.atEOF()) return(null);
+            return(readOneOf(new LetR(), new FunR()));
         }
     }
 

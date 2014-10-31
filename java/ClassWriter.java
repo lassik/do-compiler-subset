@@ -80,38 +80,59 @@ public class ClassWriter {
     private int poolCount;
 
     private int constUTF8(String s) throws Exception {
-        u1(pool, 1); byte[] b = s.getBytes("utf8");
-        u2(pool, b.length); pool.write(b, 0, b.length);
+        u1(pool, 1);
+        byte[] b = s.getBytes("utf8");
+        u2(pool, b.length);
+        pool.write(b, 0, b.length);
         return(++poolCount);
     }
 
     private int constLiteralInt(int x) throws Exception {
-        u1(pool, 3); u4(pool, x); return(++poolCount);
+        u1(pool, 3);
+        u4(pool, x);
+        return(++poolCount);
     }
 
     private int constClass(String className) throws Exception {
         int i = constUTF8(className);
-        u1(pool, 7); u2(pool, i); return(++poolCount);
+        u1(pool, 7);
+        u2(pool, i);
+        return(++poolCount);
     }
 
     private int constLiteralString(String s) throws Exception {
         int i = constUTF8(s);
-        u1(pool, 8); u2(pool, i); return(++poolCount);
+        u1(pool, 8);
+        u2(pool, i);
+        return(++poolCount);
     }
 
     private int constField(String className, String fieldName, String fieldType) throws Exception {
-        int i = constClass(className); int j = constNameAndType(fieldName, fieldType);
-        u1(pool, 9); u2(pool, i); u2(pool, j); return(++poolCount);
+        int i = constClass(className);
+        int j = constNameAndType(fieldName, fieldType);
+
+        u1(pool, 9);
+        u2(pool, i);
+        u2(pool, j);
+        return(++poolCount);
     }
 
     private int constMethod(String className, String fieldName, String fieldType) throws Exception {
-        int i = constClass(className); int j = constNameAndType(fieldName, fieldType);
-        u1(pool, 10); u2(pool, i); u2(pool, j); return(++poolCount);
+        int i = constClass(className);
+        int j = constNameAndType(fieldName, fieldType);
+        u1(pool, 10);
+        u2(pool, i);
+        u2(pool, j);
+        return(++poolCount);
     }
 
     private int constNameAndType(String fieldName, String fieldType) throws Exception {
-        int i = constUTF8(fieldName); int j = constUTF8(fieldType);
-        u1(pool, 12); u2(pool, i); u2(pool, j); return(++poolCount);
+        int i = constUTF8(fieldName);
+        int j = constUTF8(fieldType);
+        u1(pool, 12);
+        u2(pool, i);
+        u2(pool, j);
+        return(++poolCount);
     }
 
     /*
@@ -150,50 +171,66 @@ public class ClassWriter {
                 String s = prog.prims[op.arg];
                 if(s.equals("...")) {
                     // goto offset
-                    int rel = -code.size(); u1(code, 167); s2(code, rel);
+                    int rel = -code.size();
+                    u1(code, 167);
+                    s2(code, rel);
                 } else if(s.equals("&")) {
                     // getstatic: push DoPrim.flag onto the operand stack
-                    u1(code, 178); u2(code, constField("DoPrim", "flag", "Z"));
+                    u1(code, 178);
+                    u2(code, constField("DoPrim", "flag", "Z"));
                     // ifne offset:sint16: pop operand stack, goto offset if true
-                    u1(code, 154); s2(code, 4);
+                    u1(code, 154);
+                    s2(code, 4);
                     // return
                     u1(code, 177);
                     // ifne jumps here
                 } else if(s.equals("|")) {
                     // getstatic: push DoPrim.flag onto the operand stack
-                    u1(code, 178); u2(code, constField("DoPrim", "flag", "Z"));
+                    u1(code, 178);
+                    u2(code, constField("DoPrim", "flag", "Z"));
                     // ifeq offset:sint16: pop operand stack, goto offset if false
-                    u1(code, 153); s2(code, 4);
+                    u1(code, 153);
+                    s2(code, 4);
                     // return
                     u1(code, 177);
                     // ifeq jumps here
                 } else {
                     // invokestatic index:uint16 -- const pool symbolic ref to method
-                    u1(code, 184); u2(code, constMethod("DoPrim", DoPrimID.get(s), "()V"));
+                    u1(code, 184);
+                    u2(code, constMethod("DoPrim", DoPrimID.get(s), "()V"));
                 }
             } else if(op instanceof ProgFunOpCall) {
                 // invokestatic index:uint16 -- const pool symbolic ref to method
-                u1(code, 184); u2(code, constMethod("DoProgram", prog.funs[op.arg].id, "()V"));
+                u1(code, 184);
+                u2(code, constMethod("DoProgram", prog.funs[op.arg].id, "()V"));
             } else if(op instanceof ProgFunOpPushInt) {
                 // ldc_w index:uint16 -> pushed
-                u1(code, 19); u2(code, constLiteralInt(op.arg));
+                u1(code, 19);
+                u2(code, constLiteralInt(op.arg));
                 // invokestatic index:uint16 -- const pool symbolic ref to method
-                u1(code, 184); u2(code, constMethod("DoPrim", "push", "(I)V"));
+                u1(code, 184);
+                u2(code, constMethod("DoPrim", "push", "(I)V"));
             } else if(op instanceof ProgFunOpPushStr) {
                 // ldc_w index:uint16 -> pushed
-                u1(code, 19); u2(code, constLiteralString(prog.strs[op.arg]));
+                u1(code, 19);
+                u2(code, constLiteralString(prog.strs[op.arg]));
                 // invokestatic index:uint16 -- const pool symbolic ref to method
-                u1(code, 184); u2(code, constMethod("DoPrim", "push", "(Ljava/lang/Object;)V"));
+                u1(code, 184);
+                u2(code, constMethod("DoPrim", "push", "(Ljava/lang/Object;)V"));
             } else if(op instanceof ProgFunOpVarGet) {
                 // getstatic index:uint16 -> value pushed onto operand stack / index is const pool index
-                u1(code, 178); u2(code, constField("DoProgram", prog.vars[op.arg].id, "Ljava/lang/Object;"));
+                u1(code, 178);
+                u2(code, constField("DoProgram", prog.vars[op.arg].id, "Ljava/lang/Object;"));
                 // invokestatic index:uint16 -- const pool symbolic ref to method
-                u1(code, 184); u2(code, constMethod("DoPrim", "push", "(Ljava/lang/Object;)V"));
+                u1(code, 184);
+                u2(code, constMethod("DoPrim", "push", "(Ljava/lang/Object;)V"));
             } else if(op instanceof ProgFunOpVarSet) {
                 // invokestatic index:uint16 -- const pool symbolic ref to method
-                u1(code, 184); u2(code, constMethod("DoPrim", "pop", "()Ljava/lang/Object;"));
+                u1(code, 184);
+                u2(code, constMethod("DoPrim", "pop", "()Ljava/lang/Object;"));
                 // putstatic index:uint16 -- const pool symbolic ref to field
-                u1(code, 179); u2(code, constField("DoProgram", prog.vars[op.arg].id, "Ljava/lang/Object;"));
+                u1(code, 179);
+                u2(code, constField("DoProgram", prog.vars[op.arg].id, "Ljava/lang/Object;"));
             }
         }
         u1(code, 177); // return

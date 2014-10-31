@@ -33,7 +33,9 @@ public class DoPrimMIDlet extends MIDlet implements CommandListener {
     }
 
     public void p_newform() {
-        Form f = new Form((String)pop()); f.setCommandListener(this); push(f);
+        Form f = new Form((String)pop());
+        f.setCommandListener(this);
+        push(f);
     }
 
     public void p_newintfield() {

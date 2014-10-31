@@ -17,14 +17,18 @@ public class CondReader {
     private PushbackReader pr;
 
     public int readOne(IntP p) throws IOException {
-        int c = pr.read(); if(p.call(c)) return(c);
-        if(c != EOF) pr.unread(c); return(NOMATCH);
+        int c = pr.read();
+        if(p.call(c)) return(c);
+        if(c != EOF) pr.unread(c);
+        return(NOMATCH);
     }
 
     public String readSome(IntP p) throws IOException {
         StringBuilder sb = new StringBuilder();
-        int c; while((c = readOne(p)) != NOMATCH) sb.append((char)c);
-        if(sb.length() > 0) return(sb.toString()); return(null);
+        int c;
+        while((c = readOne(p)) != NOMATCH) sb.append((char)c);
+        if(sb.length() > 0) return(sb.toString());
+        return(null);
     }
 
     public boolean skipOne(IntP p) throws IOException {
@@ -36,7 +40,9 @@ public class CondReader {
     }
     
     public boolean skipSome(IntP p) throws IOException {
-        if(!skipOne(p)) return(false); while(skipOne(p)); return(true);
+        if(!skipOne(p)) return(false);
+        while(skipOne(p));
+        return(true);
     }
     
     public CondReader(PushbackReader pr) {

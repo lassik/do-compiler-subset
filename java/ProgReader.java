@@ -17,14 +17,17 @@ public class ProgReader {
     private Map<String, Integer> nameid = new HashMap<String, Integer>();
 
     private String nameIDBase(String name) {
-        StringBuilder sb = new StringBuilder(); sb.append('_');
+        StringBuilder sb = new StringBuilder();
+        sb.append('_');
         for(char c: name.toCharArray()) sb.append(Character.isLetterOrDigit(c) ? c : '_');
         return(sb.toString());
     }
 
     private String nameNewID(String name) {
-        String base = nameIDBase(name); Integer obj = nameid.get(base);
-        int i = (obj == null) ? 0 : (obj.intValue() + 1); nameid.put(base, i);
+        String base = nameIDBase(name);
+        Integer obj = nameid.get(base);
+        int i = (obj == null) ? 0 : (obj.intValue() + 1);
+        nameid.put(base, i);
         return(base + String.format("%d", i));
     }
 
@@ -37,7 +40,8 @@ public class ProgReader {
     }
 
     private ProgFunOp compileFunOp(ConsFunOpRef cfo) {
-        ProgFunOp pfo = dict.get(cfo.name); if(pfo != null) return(pfo);
+        ProgFunOp pfo = dict.get(cfo.name);
+        if(pfo != null) return(pfo);
         return(new ProgFunOpPrim(prims.indexOfOldOrNew(cfo.name)));
     }
 
@@ -52,7 +56,8 @@ public class ProgReader {
     }
 
     private void compile(ConsFun cf) {
-        int idx = funs.size(); List<ProgFunOp> ops = new ArrayList<ProgFunOp>();
+        int idx = funs.size();
+        List<ProgFunOp> ops = new ArrayList<ProgFunOp>();
         for(ConsFunOp cfo: cf.ops) ops.add(compileFunOp(cfo));
         funs.add(new ProgFun(cf.name, nameNewID(cf.name), ops));
         dict.put(cf.name, new ProgFunOpCall(idx));
@@ -77,7 +82,8 @@ public class ProgReader {
     }
 
     public Prog read() throws Exception {
-        Cons c; while((c = cr.read()) != null) compile(c);
+        Cons c;
+        while((c = cr.read()) != null) compile(c);
         return(new Prog(prims, strs, vars, funs));
     }
 

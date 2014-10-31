@@ -4,7 +4,8 @@ public class ProgVar {
     public String id;
 
     public ProgVar(String name, String id) {
-        this.name = name; this.id = id;
+        this.name = name;
+        this.id = id;
     }
 
     public String toString() {

@@ -16,11 +16,14 @@ public class StrTab {
     }
 
     public int indexOfNew(String s) {
-        strings.add(s); return(strings.size() - 1);
+        strings.add(s);
+        return(strings.size() - 1);
     }
 
     public int indexOfOldOrNew(String s) {
-        int i = indexOfOld(s); if(i == -1) i = indexOfNew(s); return(i);
+        int i = indexOfOld(s);
+        if(i == -1) i = indexOfNew(s);
+        return(i);
     }
 
     public String[] strings() {

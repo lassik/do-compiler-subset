@@ -1,6 +1,8 @@
 public class ConsFunOpPushStr extends ConsFunOp {
 
-    public String value; public ConsFunOpPushStr(String value) {
+    public String value;
+
+    public ConsFunOpPushStr(String value) {
         this.value = value;
     }
 
@@ -9,6 +11,7 @@ public class ConsFunOpPushStr extends ConsFunOp {
     }
 
     public static ConsFunOpPushStr from(Tok t) {
-        if(t == null) return(null); return(new ConsFunOpPushStr(((TokStr)t).value));
+        if(t == null) return(null);
+        return(new ConsFunOpPushStr(((TokStr)t).value));
     }
 }

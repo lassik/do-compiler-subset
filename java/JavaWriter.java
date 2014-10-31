@@ -9,7 +9,9 @@ public class JavaWriter {
     private Writer writer;
 
     private void emit(String s) throws IOException {
-        writer.write(s); writer.write("\n"); writer.flush();
+        writer.write(s);
+        writer.write("\n");
+        writer.flush();
     }
 
     public void write(Prog prog) throws Exception {

@@ -31,11 +31,14 @@ public class DoPrim {
     }
 
     public static void droppush(int n, Object x) {
-        drop(n); push(x);
+        drop(n);
+        push(x);
     }
 
     public static Object pop() {
-        Object x = peek(0); drop(1); return(x);
+        Object x = peek(0);
+        drop(1);
+        return(x);
     }
 
     // Data primitives
@@ -68,27 +71,33 @@ public class DoPrim {
     // Comparison primitives
 
     public static void p_s_eq() {
-        flag = (((Integer)peek(1)).intValue() == ((Integer)peek(0)).intValue()); drop(1);
+        flag = (((Integer)peek(1)).intValue() == ((Integer)peek(0)).intValue());
+        drop(1);
     }
 
     public static void p_s_ne() {
-        flag = (((Integer)peek(1)).intValue() != ((Integer)peek(0)).intValue()); drop(1);
+        flag = (((Integer)peek(1)).intValue() != ((Integer)peek(0)).intValue());
+        drop(1);
     }
 
     public static void p_s_le() {
-        flag = (((Integer)peek(1)).intValue() <= ((Integer)peek(0)).intValue()); drop(1);
+        flag = (((Integer)peek(1)).intValue() <= ((Integer)peek(0)).intValue());
+        drop(1);
     }
 
     public static void p_s_lt() {
-        flag = (((Integer)peek(1)).intValue() <  ((Integer)peek(0)).intValue()); drop(1);
+        flag = (((Integer)peek(1)).intValue() <  ((Integer)peek(0)).intValue());
+        drop(1);
     }
 
     public static void p_s_ge() {
-        flag = (((Integer)peek(1)).intValue() >= ((Integer)peek(0)).intValue()); drop(1);
+        flag = (((Integer)peek(1)).intValue() >= ((Integer)peek(0)).intValue());
+        drop(1);
     }
 
     public static void p_s_gt() {
-        flag = (((Integer)peek(1)).intValue() >  ((Integer)peek(0)).intValue()); drop(1);
+        flag = (((Integer)peek(1)).intValue() >  ((Integer)peek(0)).intValue());
+        drop(1);
     }
 
     // Arithmetic primitives
@@ -108,14 +117,18 @@ public class DoPrim {
     public static void p_s_divmod() {
         int q = ((Integer)peek(1)).intValue() / ((Integer)peek(0)).intValue();
         int r = ((Integer)peek(1)).intValue() % ((Integer)peek(0)).intValue();
-        drop(2); push(q); push(r);
+        drop(2);
+        push(q); 
+        push(r);
     }
 
     // Sequence operations
 
     public static void p_vector() {
-        ArrayList al = new ArrayList(); int n = ((Integer)pop()).intValue();
-        for(; n > 0; --n) al.add(null); push(al);
+        ArrayList al = new ArrayList();
+        int n = ((Integer)pop()).intValue();
+        for(; n > 0; --n) al.add(null);
+        push(al);
     }
 
     public static void p_count() throws Exception {
@@ -129,7 +142,8 @@ public class DoPrim {
     }
 
     public static void p_find() {
-        int i = ((String)pop()).indexOf((String)pop()); flag = (i >= 0);
+        int i = ((String)pop()).indexOf((String)pop());
+        flag = (i >= 0);
         if(flag) push(new Integer(i));
     }
 
@@ -141,7 +155,8 @@ public class DoPrim {
         if(peek(0) instanceof ArrayList) {
             droppush(1, ((ArrayList)peek(0)).get(((Integer)peek(1)).intValue()));
         } else if(peek(0) instanceof String) {
-            int i = ((Integer)peek(1)).intValue(); droppush(1, ((String)peek(0)).substring(i, i + 1));
+            int i = ((Integer)peek(1)).intValue();
+            droppush(1, ((String)peek(0)).substring(i, i + 1));
         } else {
             throw new Exception("Sequence required");
         }
@@ -158,11 +173,13 @@ public class DoPrim {
     }
 
     public static void p_newline() {
-        System.out.println(); System.out.flush();
+        System.out.println();
+        System.out.flush();
     }
 
     public static void p_write() {
-        System.out.print(pop()); System.out.flush();
+        System.out.print(pop());
+        System.out.flush();
     }
 
     public static void p_showstack() {
@@ -170,6 +187,8 @@ public class DoPrim {
     }
 
     public static void p_die() {
-        System.err.println((String)pop()); System.err.flush(); System.exit(1);
+        System.err.println((String)pop());
+        System.err.flush();
+        System.exit(1);
     }
 }

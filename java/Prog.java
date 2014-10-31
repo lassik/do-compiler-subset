@@ -15,11 +15,15 @@ public class Prog {
     }
 
     private String p(Object[] xs, boolean newline) {
-        StringBuilder sb = new StringBuilder(); sb.append(newline? "\n" : "[ ");
+        StringBuilder sb = new StringBuilder();
+        sb.append(newline? "\n" : "[ ");
         for(Object x: xs) {
-            if(newline) sb.append("  "); sb.append(x); sb.append(newline ? "\n" : " ");
+            if(newline) sb.append("  ");
+            sb.append(x);
+            sb.append(newline ? "\n" : " ");
         }
-        if(!newline) sb.append("]"); return(sb.toString());
+        if(!newline) sb.append("]");
+        return(sb.toString());
     }
 
     public String toString() {

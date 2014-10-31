@@ -15,10 +15,12 @@ public class CmdLineProg {
         void run(String srcPath, String dstPath) throws Exception;
     }
 
-    private String progname, srcExt, dstExt; private Runnable runnable;
+    private String progname, srcExt, dstExt;
+    private Runnable runnable;
 
     private void dieSaying(String s) {
-        System.err.println(s); System.exit(1); 
+        System.err.println(s);
+        System.exit(1); 
     }
 
     private void usage() {
@@ -59,7 +61,11 @@ public class CmdLineProg {
     }
 
     public CmdLineProg(String progname, String srcExt, String dstExt, String[] args, Runnable runnable) throws Exception {
-        this.progname = progname; this.srcExt = srcExt; this.dstExt = dstExt; this.runnable = runnable;
-        if(args.length != 1) usage(); runWithArg(args[0]); 
+        this.progname = progname;
+        this.srcExt = srcExt;
+        this.dstExt = dstExt;
+        this.runnable = runnable;
+        if(args.length != 1) usage();
+        runWithArg(args[0]); 
     } 
 }

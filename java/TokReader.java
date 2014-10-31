@@ -11,25 +11,36 @@ public class TokReader {
     private Tok nextTok;
 
     private TokInt parseInt(String s, String prefix, int radix) {
-        boolean isneg = s.startsWith("-"); if(isneg) s = s.substring(1);
-        if(!s.startsWith(prefix)) return(null); s = s.substring(prefix.length()); int val;
+        boolean isneg = s.startsWith("-");
+        if(isneg) s = s.substring(1);
+        if(!s.startsWith(prefix)) return(null);
+        s = s.substring(prefix.length());
+        int val;
         try {
             val = Integer.parseInt(s, radix);
         } catch(NumberFormatException e) {
             return(null);
         }
-        if(val < 0) return(null); if(isneg) val = -val; return(new TokInt(val));
+        if(val < 0) return(null);
+        if(isneg) val = -val;
+        return(new TokInt(val));
     }
 
     private Tok readBare() throws IOException {
-        Tok r; String s = cr.readSome(bareChar); if(s == null) return(null);
-        r = parseInt(s, "", 10);   if(r != null) return(r);
-        r = parseInt(s, "0x", 16); if(r != null) return(r);
+        Tok r;
+        String s = cr.readSome(bareChar);
+        if(s == null) return(null);
+        r = parseInt(s, "", 10);
+        if(r != null) return(r);
+        r = parseInt(s, "0x", 16);
+        if(r != null) return(r);
         return(new TokSym(s));
     }
 
     private char readStrChar() throws IOException, SyntaxError {
-        int x = cr.readOne(strChar); if(x == CondReader.NOMATCH) throw new SyntaxError(); return((char)x);
+        int x = cr.readOne(strChar);
+        if(x == CondReader.NOMATCH) throw new SyntaxError();
+        return((char)x);
     }
 
     private TokStr readStr() throws IOException, SyntaxError {
@@ -40,11 +51,15 @@ public class TokReader {
     }
 
     private TokSemi readSemi() throws IOException {
-        if(!cr.skipOne(';')) return(null); return(new TokSemi());
+        if(!cr.skipOne(';')) return(null);
+        return(new TokSemi());
     }
 
     private boolean skipComment() throws IOException {
-        if(!cr.skipOne('#')) return(false); cr.skipSome(lineChar); cr.skipOne('\n'); return(true);
+        if(!cr.skipOne('#')) return(false);
+        cr.skipSome(lineChar);
+        cr.skipOne('\n');
+        return(true);
     }
 
     public boolean atEOF() throws IOException {
@@ -53,19 +68,27 @@ public class TokReader {
     }
 
     private Tok readNext() throws IOException, SyntaxError {
-        if(atEOF()) return(null); Tok r;
-        r = readStr();  if(r != null) return(r);
-        r = readSemi(); if(r != null) return(r);
-        r = readBare(); if(r != null) return(r);
+        if(atEOF()) return(null);
+        Tok r;
+        r = readStr();
+        if(r != null) return(r);
+        r = readSemi();
+        if(r != null) return(r);
+        r = readBare();
+        if(r != null) return(r);
         throw new SyntaxError();
     }
 
     private Tok next() throws IOException, SyntaxError {
-        if(nextTok == null) nextTok = readNext(); return(nextTok);
+        if(nextTok == null) nextTok = readNext();
+        return(nextTok);
     }
 
     private Tok consumeNextIf(boolean ok) {
-        if(!ok) return(null); Tok t = nextTok; nextTok = null; return(t);
+        if(!ok) return(null);
+        Tok t = nextTok;
+        nextTok = null;
+        return(t);
     }
 
     public Tok read(Class cls) throws IOException, SyntaxError {

@@ -62,7 +62,8 @@ public class DoPrimID {
     }
     
     public static String get(String name) throws Exception {
-        initialize(); String id = map.get(name);
+        initialize();
+        String id = map.get(name);
         if(id == null) throw new Exception("No primitive named " + name);
         return(id);
     }
