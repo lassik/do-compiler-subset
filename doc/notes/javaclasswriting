@@ -1,0 +1,48 @@
+CONSTPOOL
+
+CLASS
+
+  public class
+
+FIELD
+
+  static Object
+
+METHOD
+
+  public static void String[] throws Exception
+  public static void () throws Exception
+
+STATEMENT
+
+  ...
+
+    goto offset:sint16
+
+  & if(!cls.var) break;           
+  | if(cls.var) break;
+
+    getstatic index:uint16 -> value pushed onto operand stack / index is const pool index
+    ifeq offset:sint16 == if pop() is false
+    ifne offset:sint16 == if pop() is true
+
+  primfun cls.fun();
+  userfun fun();
+
+    invokestatic index:uint16 -- const pool symbolic ref to method
+
+  pushint pkg.fun(123);
+  pushstr pkg.fun("str");
+
+    ldc index:uint8 -> pushed
+    invokestatic index:uint16 -- const pool symbolic ref to method
+
+  getvar pkg.fun(var);
+
+    getstatic index:uint16 -> value pushed onto operand stack / index is const pool index
+    invokestatic index:uint16 -- const pool symbolic ref to method
+
+  setvar var = pkg.fun();
+
+    invokestatic index:uint16 -- const pool symbolic ref to method
+    putstatic index:uint16 -- const pool symbolic ref to field

@@ -1,0 +1,51 @@
+http://java.sun.com/docs/books/jvms/second_edition/html/VMSpecTOC.doc.html
+c:\lassi\down\vmspec\VMSpecTOC.doc.html
+
++TokReader
+=Tok                  *
+ =TokInt              value
+ =TokSemi             -
+ =TokStr              value
+ =TokSym              name
+
++ConsReader
+=Cons                 *
+ =ConsFun             name ops
+ =ConsFunOp           *
+  =ConsFunOpPushInt   value
+  =ConsFunOpPushStr   value
+  =ConsFunOpRef       name
+ =ConsLet             varnames
+
++ProgReader
+=Prog                 prims strs vars funs
+=ProgFun              name id ops
+=ProgFunOp            * arg
+ =ProgFunOpCall       -
+ =ProgFunOpPrim       -
+ =ProgFunOpPushInt    -
+ =ProgFunOpPushStr    -
+ =ProgFunOpVarGet     -
+ =ProgFunOpVarSet     -
+=ProgVar              name id
+
+1. make classname.java
+2. write: public [abstract] class classname [extends ...] { }
+3. if fields: for each field: write: public fieldtype fieldname;
+4. if fields: write: public classname(fieldtype fieldname, ...) { this.fieldname = fieldname; ... }
+5. if subclass of Tok or Cons: write toString method
+6. if subclass of Tok: write equals method
+
+CONSTANT_Utf8_info              tag string
+CONSTANT_Fieldref_info          tag u2 u2
+CONSTANT_Methodref_info         tag u2 u2
+CONSTANT_NameAndType_info       tag u2 u2
+CONSTANT_Class_info             tag u2
+CONSTANT_String_info            tag u2
+CONSTANT_Integer_info           tag u4
+
+Const
+ ConstUTF8
+ ConstClass
+ ConstString
+ ConstInteger

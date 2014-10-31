@@ -1,0 +1,19 @@
+The primitives are in the following places:
+
+  Special primitives:
+
+    Final document
+    ClassWriter.java
+    JavaWriter.java
+
+  Non-special primitives:
+
+    Final document
+    DoPrimID.java
+    DoPrim.java
+
+  Cell phone primitives:
+
+    Final document
+    DoPrimID.java
+    DoPrimMIDlet.java
